@@ -18,23 +18,69 @@
   }
 
   /* The stage holds the artwork and its hotspots.
-     It scales to fit the viewport while keeping the image's aspect ratio. */
+     It scales to fit the viewport while keeping the image's aspect ratio.
+     Reserves 320px total (160px each side) for the arrows. */
   #stage {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width:  min(100vw, calc(100vh * 0.7384));   /* 1084 / 1468 ≈ 0.7384 */
-    height: min(100vh, calc(100vw * 1.3542));   /* 1468 / 1084 ≈ 1.3542 */
+    width:  min(calc(100vw - 320px), calc(100vh * 0.7384));   /* 1084 / 1468 ≈ 0.7384 */
+    height: min(100vh, calc((100vw - 320px) * 1.3542));       /* 1468 / 1084 ≈ 1.3542 */
   }
 
   /* Artwork fills the stage */
-  #stage img {
+  #stage > img {
     width: 100%;
     height: 100%;
     display: block;
     pointer-events: none;   /* clicks pass through to hotspots */
     user-select: none;
+  }
+
+  /* ---- Prev / Next neon chevron arrows ---- */
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100px;
+    z-index: 100;
+    cursor: pointer;
+    outline: none;
+    filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.55));
+    transition: filter 0.2s ease, transform 0.2s ease;
+  }
+
+  .arrow img {
+    display: block;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .arrow:hover,
+  .arrow:focus-visible {
+    filter:
+      drop-shadow(0 0 14px rgba(0, 255, 255, 1))
+      drop-shadow(0 0 34px rgba(0, 200, 255, 0.85));
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .arrow:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  /* Glue the arrows to the outside edges of the stage with a small gap. */
+  .arrow-left {
+    right: 100%;
+    margin-right: 20px;
+  }
+
+  .arrow-right {
+    left: 100%;
+    margin-left: 20px;
   }
 
   /* ---- Grid coordinates (percentages of the image) ----
@@ -45,7 +91,7 @@
     --c2: 35.0%;
     --c3: 67.0%;
     --cw: 30.0%;
-  
+
     /* Rows */
     --r1: 1.5%;    /* top of row 1 — you said this is perfect */
     --rp: 19.1%;   /* row pitch (distance between row tops)  ← was 20% */
@@ -91,6 +137,17 @@
   .hotspot:active {
     background: rgba(0, 200, 255, 0.25);
   }
+
+  /* Narrow screens: shrink arrows and reserved space */
+  @media (max-width: 700px) {
+    #stage {
+      width:  min(calc(100vw - 170px), calc(100vh * 0.7384));
+      height: min(100vh, calc((100vw - 170px) * 1.3542));
+    }
+    .arrow { width: 55px; }
+    .arrow-left  { margin-right: 10px; }
+    .arrow-right { margin-left: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -123,6 +180,19 @@
     <a class="hotspot r5 c1" href="tmnt.html"    aria-label="TMNT"></a>
     <a class="hotspot r5 c2" href="wboy.html"   aria-label="Wonder Boy"></a>
     <a class="hotspot r5 c3" href="zaxxon.html" aria-label="Zaxxon"></a>
+
+    <!-- Prev / Next arrows — INSIDE the stage so they stay glued to the grid -->
+    <a class="arrow arrow-left"
+       href="https://djm3n4c3.github.io/mamehub1/index.html"
+       aria-label="Previous page">
+      <img src="prev.png" alt="Previous page">
+    </a>
+
+    <a class="arrow arrow-right"
+       href="https://djm3n4c3.github.io/mamehub/index.html"
+       aria-label="Next page">
+      <img src="next.png" alt="Next page">
+    </a>
   </div>
 
 </body>
