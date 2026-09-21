@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>MAME Hub2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: system-ui, sans-serif;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* The stage holds the artwork and its hotspots.
+     It scales to fit the viewport while keeping the image's aspect ratio. */
+  #stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width:  min(100vw, calc(100vh * 0.7384));   /* 1084 / 1468 ≈ 0.7384 */
+    height: min(100vh, calc(100vw * 1.3542));   /* 1468 / 1084 ≈ 1.3542 */
+  }
+
+  /* Artwork fills the stage */
+  #stage img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;   /* clicks pass through to hotspots */
+    user-select: none;
+  }
+
+  /* ---- Grid coordinates (percentages of the image) ----
+     Tweak these if any hotspot is a touch off. */
+  :root {
+    /* Columns (unchanged — you said these are perfect) */
+    --c1: 3.0%;
+    --c2: 35.0%;
+    --c3: 67.0%;
+    --cw: 30.0%;
+  
+    /* Rows */
+    --r1: 1.5%;    /* top of row 1 — you said this is perfect */
+    --rp: 19.1%;   /* row pitch (distance between row tops)  ← was 20% */
+    --rh: 18.5%;   /* row height                             ← unchanged */
+  }
+
+  /* Column + row utility classes */
+  .c1 { left: var(--c1); }
+  .c2 { left: var(--c2); }
+  .c3 { left: var(--c3); }
+
+  .r1 { top: var(--r1); }
+  .r2 { top: calc(var(--r1) + var(--rp)); }
+  .r3 { top: calc(var(--r1) + var(--rp) * 2); }
+  .r4 { top: calc(var(--r1) + var(--rp) * 3); }
+  .r5 { top: calc(var(--r1) + var(--rp) * 4); }
+
+  /* The clickable hotspots */
+  .hotspot {
+    position: absolute;
+    display: block;
+    width: var(--cw);
+    height: var(--rh);
+    background: transparent;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease, background 0.15s ease;
+    z-index: 10;
+  }
+
+  /* Arcade-style glow on hover/focus */
+  .hotspot:hover,
+  .hotspot:focus-visible {
+    background: rgba(0, 200, 255, 0.12);
+    box-shadow:
+      0 0 22px rgba(0, 200, 255, 0.9),
+      0 0 60px rgba(0, 200, 255, 0.5),
+      inset 0 0 18px rgba(0, 200, 255, 0.45);
+    outline: none;
+  }
+
+  /* Brief "press" feedback */
+  .hotspot:active {
+    background: rgba(0, 200, 255, 0.25);
+  }
+</style>
+</head>
+<body>
+
+  <div id="stage">
+    <!-- Rename this file if your artwork has a different name -->
+    <img src="Main2.png" alt="MAME Hub — Arcade Game Selector">
+
+    <!-- Row 1 -->
+    <a class="hotspot r1 c1" href="kungfu.html"     aria-label="Kung Fu Master"></a>
+    <a class="hotspot r1 c2" href="outrun.html"      aria-label="Out Run"></a>
+    <a class="hotspot r1 c3" href="pow.html"     aria-label="Prisoners of War"></a>
+
+    <!-- Row 2 -->
+    <a class="hotspot r2 c1" href="rampage.html"  aria-label="Rampage"></a>
+    <a class="hotspot r2 c2" href="rtype.html"    aria-label="R-Type"></a>
+    <a class="hotspot r2 c3" href="sf.html"    aria-label="Street Fighter"></a>
+
+    <!-- Row 3 -->
+    <a class="hotspot r3 c1" href="shangon.html"     aria-label="Super Hang On"></a>
+    <a class="hotspot r3 c2" href="sharrier.html"       aria-label="Space Harrier"></a>
+    <a class="hotspot r3 c3" href="shinobi.html"   aria-label="Shinobi."></a>
+
+    <!-- Row 4 -->
+    <a class="hotspot r4 c1" href="simps.html"   aria-label="The Simpsons"></a>
+    <a class="hotspot r4 c2" href="sinistar.html"    aria-label="SiniStar"></a>
+    <a class="hotspot r4 c3" href="sw.html"  aria-label="Star Wars"></a>
+
+    <!-- Row 5 -->
+    <a class="hotspot r5 c1" href="tmnt.html"    aria-label="TMNT"></a>
+    <a class="hotspot r5 c2" href="wboy.html"   aria-label="Wonder Boy"></a>
+    <a class="hotspot r5 c3" href="zaxxon.html" aria-label="Zaxxon"></a>
+  </div>
+
+</body>
+</html>
